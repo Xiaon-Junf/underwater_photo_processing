@@ -1,0 +1,111 @@
+# 图片文件
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.tiff
+*.gif
+*.svg
+*.ico
+
+# 数据文件
+*.npy
+*.npz
+*.ply
+*.pcd
+
+# 视频文件
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.mkv
+*.flv
+
+# HTML文件
+*.html
+*.htm
+
+# 压缩文件
+*.zip
+*.rar
+*.7z
+*.tar
+*.tar.gz
+*.tgz
+*.tar.bz2
+
+# Python相关
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# conda environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE相关
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 模型文件（通常很大）
+*.pth
+*.h5
+*.model
+
+# 日志文件
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# 数据目录（包含大量图片和数据文件的目录）
+__MACOSX/
+outputs/
+outputs_1/
+outputs_2/
+
