@@ -1,0 +1,27 @@
+# 双目立体视觉图像处理工具 - 依赖包列表
+
+# 核心图像处理库
+opencv-python>=4.5.0
+numpy>=1.21.0
+
+# 配置文件处理
+PyYAML>=6.0
+
+# 进度条显示
+tqdm>=4.64.0
+
+# 路径处理（Python 3.7+内置，但列出以备参考）
+# pathlib  # Python 3.4+ 标准库
+
+# 多进程处理（Python标准库）
+# multiprocessing  # Python标准库
+
+# 可选：Jupyter Notebook支持（如需使用.ipynb文件）
+# jupyter>=1.0.0
+# ipykernel>=6.0.0
+
+# 可选：图像显示和调试
+# matplotlib>=3.5.0
+
+# 可选：科学计算增强
+# scipy>=1.7.0 
