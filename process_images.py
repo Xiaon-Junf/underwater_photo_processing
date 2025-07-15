@@ -3,15 +3,15 @@ import numpy as np
 import os
 import sys
 from pathlib import Path  # 新增导入
-from utils.undistortion import preprocess, undistortion, getRectifyTransform, rectify_image, draw_line, \
+from utils.undistortion import preprocess_color, undistortion, getRectifyTransform, rectify_image, draw_line, \
     read_calibration_data
 from tqdm import tqdm
 from multiprocessing import Pool, cpu_count
 
 # 配置参数（使用Path处理路径）
-left_folder = Path(r'/media/junf/零节零壹/picture/0622_0_redTilmpa_rd/左眼(DA5182144)')
-right_folder = Path(r'/media/junf/零节零壹/picture/0622_0_redTilmpa_rd/右眼(DA5182138)')
-output_base = Path(r'/media/junf/零节零壹/picture/0622_0_redTilmpa_rd/')
+left_folder = Path(r'/media/junf/零节零壹/picture/0703_6_Huguang/左眼(DA5182144)')
+right_folder = Path(r'/media/junf/零节零壹/picture/0703_6_Huguang/右眼(DA5182138)')
+output_base = Path(r'/media/junf/零节零壹/picture/0703_6_Huguang/Color/')
 calib_file = Path(r'/home/junf/program/MoChaOutputs/uw_photo02.yaml')
 
 # 创建输出目录（使用Path的mkdir方法）
@@ -50,8 +50,8 @@ def is_file_processed(filename):
 
 # 处理单个文件（使用Path和文件存在性检查）
 def process_file(filename):
-    # if not filename.lower().endswith('.png') or is_file_processed(filename):
-    if not filename.lower().endswith('.bmp'):
+    if not filename.lower().endswith('.png') or is_file_processed(filename):
+    # if not filename.lower().endswith('.bmp'):
         tqdm.write(f"跳过文件: {filename}")
         return
 
@@ -73,12 +73,12 @@ def process_file(filename):
             tqdm.write(f"无法读取文件: {filename}")
             return
 
-        # CLAHE预处理
-        gray1, gray2 = preprocess(img1, img2)
+        # CLAHE预处理（保留颜色）
+        enhanced1, enhanced2 = preprocess_color(img1, img2)
 
         # 去畸变
-        undist1 = undistortion(gray1, cameraMatrix_l, distCoeffs_l)
-        undist2 = undistortion(gray2, cameraMatrix_r, distCoeffs_r)
+        undist1 = undistortion(enhanced1, cameraMatrix_l, distCoeffs_l)
+        undist2 = undistortion(enhanced2, cameraMatrix_r, distCoeffs_r)
 
         # 立体校正
         rectified1, rectified2 = rectify_image(undist1, undist2, map1x, map1y, map2x, map2y)
@@ -154,8 +154,8 @@ def process_file(filename):
         #     rectified2[:] = 0"""
 
         # 保存处理后的图像（使用Path）
-        rectified1 = cv2.cvtColor(rectified1, cv2.COLOR_GRAY2BGR)  # 添加此行
-        rectified2 = cv2.cvtColor(rectified2, cv2.COLOR_GRAY2BGR)  # 添加此行
+        # rectified1 = cv2.cvtColor(rectified1, cv2.COLOR_GRAY2BGR)  # 添加此行
+        # rectified2 = cv2.cvtColor(rectified2, cv2.COLOR_GRAY2BGR)  # 添加此行
         cv2.imwrite(str(output_base / 'processing' / 'rectified_L' / f"{filename.stem}.png"), rectified1)
         cv2.imwrite(str(output_base / 'processing' / 'rectified_R' / f"{filename.stem}.png"), rectified2)
 
