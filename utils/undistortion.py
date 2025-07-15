@@ -3,7 +3,7 @@ import numpy as np
 import yaml  # 导入相机标定的参数
 
 
-# 1. 预处理
+# 1. 灰度预处理
 # %%
 def preprocess(img1, img2) -> tuple:
     # 彩色图->灰度图
@@ -28,6 +28,47 @@ def preprocess(img1, img2) -> tuple:
 
     cv2.CLAHE.collectGarbage(clahe)
     return img1, img2
+
+
+# 彩色图像预处理 - 保留颜色的同时应用CLAHE
+def preprocess_color(img1, img2) -> tuple:
+    """
+    对彩色图像应用CLAHE增强，同时保留原有颜色信息
+    在HSV色彩空间中只对V（亮度）通道应用CLAHE，保留H（色调）和S（饱和度）
+    
+    Args:
+        img1, img2: 输入的彩色图像 (BGR格式)
+    
+    Returns:
+        tuple: 处理后的彩色图像 (BGR格式)
+    """
+    def apply_clahe_color(img):
+        if img.ndim == 2:  # 如果是灰度图，直接应用CLAHE
+            clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+            result = clahe.apply(img)
+            cv2.CLAHE.collectGarbage(clahe)
+            return result
+        
+        # 转换到HSV色彩空间,H:色调(Hue),S:饱和度(Saturation),V:亮度(Value)
+        hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+        h, s, v = cv2.split(hsv)
+        
+        # 只对V（亮度）通道应用CLAHE
+        clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+        v_enhanced = clahe.apply(v)
+        cv2.CLAHE.collectGarbage(clahe)
+        
+        # 合并通道并转换回BGR
+        hsv_enhanced = cv2.merge([h, s, v_enhanced])
+        bgr_enhanced = cv2.cvtColor(hsv_enhanced, cv2.COLOR_HSV2BGR)
+        
+        return bgr_enhanced
+    
+    # 对两张图像分别应用CLAHE增强
+    img1_enhanced = apply_clahe_color(img1)
+    img2_enhanced = apply_clahe_color(img2)
+    
+    return img1_enhanced, img2_enhanced
 
 
 # %%
